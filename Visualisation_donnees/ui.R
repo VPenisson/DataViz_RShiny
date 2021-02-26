@@ -6,28 +6,105 @@
 #
 #    http://shiny.rstudio.com/
 #
-
+library(rAmCharts)
+library(colourpicker)
 library(shiny)
 
-# Define UI for application that draws a histogramfb fbfb
+
+# Define UI for application that draws a histogram
 shinyUI(fluidPage(
-
-    # Application titlekkkkkk
-    titlePanel("Old Faithful Geyser ggggggData"),
-
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 500,
-                        value = 300)
+    
+    navbarPage(
+        title = "Les Jeux Olympiques depuis 1980",
+        
+        tabPanel(title = "Présentation", 
+                 
         ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
+        
+        
+        
+        
+        tabPanel(title = "Statistiques descriptives",
+                 fluidRow(
+                     column(width = 2,
+                            radioButtons("p2_continents", " Zone géographique:",
+                                         c("Monde" = "monde",
+                                           "Afrique" = "afrique",
+                                           "Amérique du Nord" = "amerique_nord",
+                                           "Amérique du Sud" = "amerique_sud",
+                                           "Asie" = "asie",
+                                           "Europe" = "europe",
+                                           "Océanie" = "oceanie")),
+                            
+                            checkboxGroupInput(inputId = "p2_saison", 
+                                               label = "Saison : ",
+                                               selected = c("ete", "hiver"),
+                                               choices = c("Eté" = "ete", "Hiver" = "hiver"),
+                                               inline = TRUE)
+                     
+                            
+                    ),
+                           
+                     
+                     column(width = 9,
+                            tabsetPanel(
+                                tabPanel("Boxplot",plotOutput("bp")),
+                                tabPanel("Histogramme",plotOutput("distPlot"),textOutput("classes"))
+                            )
+                     )
+                     
+                 )
+        ),
+        
+        tabPanel(title = "Page 3 : Cartographie",
+                 fluidRow(
+                     column(width = 3,
+                            sliderInput("bins",
+                                        "Nombre de classes :",
+                                        min = 1,
+                                        max = 50,
+                                        value = 25),
+                            
+                            colourInput("col", "Select colour", "purple"),
+                            
+                            textInput(inputId = 'titre', label = "Entrez le titre de l'histogramme : ", value = ""),
+                            
+                            uiOutput(outputId = "colonne")),
+                     column(width = 9,
+                            tabsetPanel(
+                                tabPanel("Boxplot",plotOutput("bp")),
+                                tabPanel("Histogramme",plotOutput("distPlot"),textOutput("classes"))
+                            )
+                     )
+                     
+                 )
+        ), 
+        
+        tabPanel(title = "Page 4 : focus sur un territoire",
+                  fluidRow(
+                      column(width = 3,
+                             sliderInput("bins",
+                                         "Nombre de classes :",
+                                         min = 1,
+                                         max = 50,
+                                         value = 25),
+                             
+                             
+                             
+                             textInput(inputId = 'titre', label = "Entrez le titre de l'histogramme : ", value = ""),
+                             
+                             uiOutput(outputId = "colonne")),
+                      column(width = 9,
+                             tabsetPanel(
+                                 tabPanel("Boxplot",plotOutput("bp")),
+                                 tabPanel("Histogramme",plotOutput("distPlot"),textOutput("classes"))
+                             )
+                      )
+                      
+                  )
         )
+        
+        
     )
+    
 ))
